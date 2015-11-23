@@ -1,15 +1,15 @@
 clear all;
 close all;
-Config{1,1} = 'C:\Users\vhasfckefays\Projects\MF Strength 4DFlow\AnalysisVelMatsPad\Stat';
-Config{1,2} = 'C:\Users\vhasfckefays\Projects\MF Strength 4DFlow\AnalysisVelMatsPad';
+Config{1,1} = 'C:\Users\vhasfckefays\Projects\MFStrength\AnalysisVelMatsPad\Stat';
+Config{1,2} = 'C:\Users\vhasfckefays\Projects\MFStrength\AnalysisVelMatsPad';
 Config{1,3} = [0 1.5 0 1.1];
-Config{2,1} = 'C:\Users\vhasfckefays\Projects\MF Strength 4DFlow\AnalysisVelMatsPadUnWrp\Stat';
-Config{2,2} = 'C:\Users\vhasfckefays\Projects\MF Strength 4DFlow\AnalysisVelMatsPadUnWrp';
+Config{2,1} = 'C:\Users\vhasfckefays\Projects\MFStrength\AnalysisVelMatsPadUnWrp\Stat';
+Config{2,2} = 'C:\Users\vhasfckefays\Projects\MFStrength\AnalysisVelMatsPadUnWrp';
 Config{2,3} = [-0.2 2 -0.2 2.5];
 Config{3,1} = '/Users/sarah/code/MFStrength/StatData/Stat';
 Config{3,2} = '/Users/sarah/code/MFStrength/StatData';
 Config{3,3} = [-0.2 2 -0.2 2.5];
-configIdx = 3;
+configIdx = 2;
 
 load(Config{configIdx,1}); %PadUnWrp
 % dim:1 3T,7T dim:2 Vx,Vy,Vz,Mag dim:3 all cases dim:4 mean,std,RMS dim:5 all over,ROI
@@ -48,7 +48,7 @@ Metric = {'mean', '\sigma', 'RMS'};
 Case = [4, 1, 2]; %dim:1 FilePre, dim:2 FileSuf, dim:3 Metric
 
 figure(2);
-CustAxis = [0 1 0 1.1];
+CustAxis = [0 0.6 0 1.1];
 col = {'b', 'r'};
 minThreshold = 0.0001;
 for cs = 1:4
@@ -67,7 +67,11 @@ for cs = 1:4
         minX = min(x(widthIdx));
         maxX = max(x(widthIdx));
         width = maxX - minX;
-        skw = skewness(c);
+        if configIdx == 3
+            skw = skewness(c);
+        else
+            skw = 0;
+        end
         bar(x, c, col{i});
         axis(CustAxis);
         line([minX maxX], [0.5 0.5], 'Color', 'k', 'LineWidth', 2);
@@ -149,8 +153,8 @@ for k =1:size(FileFolder, 2)
         plot(TIperMag{j,k}(noiseIdx,1), TIperMag{j,k}(noiseIdx,2), 'r.');
         plot(TIperMag{j,k}(signalIdx,1), TIperMag{j,k}(signalIdx,2), 'g.');
 %        plot(TIperMag{j,k}(:,1), TIperMag{j,k}(:,2), '.');
-        plot(binYmin(:,1), binYmin(:,2), 'm.');
-        plot(binYmax(:,1), binYmax(:,2), 'b.');
+%        plot(binYmin(:,1), binYmin(:,2), 'm.');
+%        plot(binYmax(:,1), binYmax(:,2), 'b.');
 
         line(Config{configIdx,3}(1:2), polyval(pLow, Config{configIdx,3}(1:2)), 'Color', 'r');
         line(Config{configIdx,3}(1:2), polyval(pHigh, Config{configIdx,3}(1:2)), 'Color', 'g');
