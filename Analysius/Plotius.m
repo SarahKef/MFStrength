@@ -158,7 +158,7 @@ for k =1:size(FileFolder, 2)
 
         line(Config{configIdx,3}(1:2), polyval(pLow, Config{configIdx,3}(1:2)), 'Color', 'r');
         line(Config{configIdx,3}(1:2), polyval(pHigh, Config{configIdx,3}(1:2)), 'Color', 'g');
-        line(Config{configIdx,3}(1:2), polyval(pMid, Config{configIdx,3}(1:2)), 'Color', 'k');
+        line(Config{configIdx,3}(1:2), polyval(pMid, Config{configIdx,3}(1:2)), 'Color', 'k', 'LineWidth' , 2);
         
         noiseNo = sum(noiseIdx);
         signalNo = sum(signalIdx);
@@ -169,7 +169,8 @@ for k =1:size(FileFolder, 2)
         SNR(j,k,:) = [noiseNo signalNo noiseRatio signalRatio totalError];
         Lines{j,k} = [pMid; pLow; pHigh];
         
-        title(sprintf('Noise: %d%%, Signal: %d%%\nTotal Error=%.2f', round(100*noiseRatio), round(100*signalRatio), totalError));
+        %title(sprintf('Noise: %d%%, Signal: %d%%\nTotal Error=%.2f', round(100*noiseRatio), round(100*signalRatio), totalError));
+        title(sprintf('Noise: %0.2f%%, Signal: %0.2f%%\nTotal Error=%.2f', 100*noiseRatio, 100*signalRatio, totalError));
         xlabel('<V_{mag}>');
         ylabel('$$\sqrt{\Sigma(\delta_i^2)}$$','Interpreter','latex');
     end
