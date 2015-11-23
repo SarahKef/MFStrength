@@ -5,7 +5,7 @@ Config{1,2} = 'C:\Users\vhasfckefays\Projects\MFStrength\AnalysisVelMatsPad';
 Config{1,3} = [0 1.5 0 1.1];
 Config{2,1} = 'C:\Users\vhasfckefays\Projects\MFStrength\AnalysisVelMatsPadUnWrp\Stat';
 Config{2,2} = 'C:\Users\vhasfckefays\Projects\MFStrength\AnalysisVelMatsPadUnWrp';
-Config{2,3} = [-0.2 2 -0.2 2.5];
+Config{2,3} = [-0.2 2.2 -0.2 2.5];
 Config{3,1} = '/Users/sarah/code/MFStrength/StatData/Stat';
 Config{3,2} = '/Users/sarah/code/MFStrength/StatData';
 Config{3,3} = [-0.2 2 -0.2 2.5];
@@ -52,7 +52,7 @@ CustAxis = [0 0.6 0 1.1];
 col = {'b', 'r'};
 minThreshold = 0.0001;
 for cs = 1:4
-    Case(2) = cs + 3;
+    Case(2) = cs + 0;
     for i = 1:2
         FileName = [FilePre{Case(1)} FileSuf{Case(2)} FileFolder{i} 'Stat'];
         FilePath = [BaseFolder filesep FileName]; 
@@ -77,7 +77,11 @@ for cs = 1:4
         line([minX maxX], [0.5 0.5], 'Color', 'k', 'LineWidth', 2);
         xlabel('\sigma_{|V|}');
         ylabel('Normalized Frequency');
-        title(sprintf('Histogram of %s of |V| of %s: %s\nWidth = %f Skewness = %f', Metric{Case(3)}, FileFolder{i}, FileSuf{Case(2)}, width, skw));
+         if configIdx == 3
+           title(sprintf('Histogram of %s of |V| of %s: %s\nWidth = %f Skewness = %f', Metric{Case(3)}, FileFolder{i}, FileSuf{Case(2)}, width, skw));
+         else
+          title(sprintf('Histogram of %s of |V| of %s: %s\nWidth = %f', Metric{Case(3)}, FileFolder{i}, FileSuf{Case(2)}, width));
+         end
     end
 end
 
@@ -170,7 +174,7 @@ for k =1:size(FileFolder, 2)
         Lines{j,k} = [pMid; pLow; pHigh];
         
         %title(sprintf('Noise: %d%%, Signal: %d%%\nTotal Error=%.2f', round(100*noiseRatio), round(100*signalRatio), totalError));
-        title(sprintf('Noise: %0.2f%%, Signal: %0.2f%%\nTotal Error=%.2f', 100*noiseRatio, 100*signalRatio, totalError));
+        title(sprintf('Signal: %0.2f%%\nNoise: %0.2f%%\nTotal Error=%.2f', 100*signalRatio, 100*noiseRatio, totalError));
         xlabel('<V_{mag}>');
         ylabel('$$\sqrt{\Sigma(\delta_i^2)}$$','Interpreter','latex');
     end
@@ -187,13 +191,14 @@ xlabel('Cases');
 %%
 figure(5);
 hold on;
-plot(SNR(:,1,3),'rx-');
-plot(SNR(:,1,4),'b.-');
-plot(SNR(:,2,3),'kx-');
-plot(SNR(:,2,4),'g.-');
+plot(SNR(:,1,3),'bx--', 'LineWidth', 2);
+plot(SNR(:,1,4),'bo-', 'LineWidth', 2);
+plot(SNR(:,2,3),'rx--', 'LineWidth', 2);
+plot(SNR(:,2,4),'ro-', 'LineWidth', 2);
 legend('3T Noise Ratio', '3T Signal Ratio', '7T Noise Ratio', '7T Signal Ratio', 'Location', 'Best');
 set(gca, 'XTickLabel', Cases);
 xlabel('Cases');
+
 
 
 %save([BaseFolder filesep 'results'], 'SNR', 'Lines', 'TIperMag');
