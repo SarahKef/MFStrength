@@ -6,7 +6,10 @@ Config{1,3} = [0 1.5 0 1.1];
 Config{2,1} = 'C:\Users\vhasfckefays\Projects\MF Strength 4DFlow\AnalysisVelMatsPadUnWrp\Stat';
 Config{2,2} = 'C:\Users\vhasfckefays\Projects\MF Strength 4DFlow\AnalysisVelMatsPadUnWrp';
 Config{2,3} = [-0.2 2 -0.2 2.5];
-configIdx = 2;
+Config{3,1} = '/Users/sarah/code/MFStrength/StatData/Stat';
+Config{3,2} = '/Users/sarah/code/MFStrength/StatData';
+Config{3,3} = [-0.2 2 -0.2 2.5];
+configIdx = 3;
 
 load(Config{configIdx,1}); %PadUnWrp
 % dim:1 3T,7T dim:2 Vx,Vy,Vz,Mag dim:3 all cases dim:4 mean,std,RMS dim:5 all over,ROI
@@ -45,14 +48,14 @@ Metric = {'mean', '\sigma', 'RMS'};
 Case = [4, 1, 2]; %dim:1 FilePre, dim:2 FileSuf, dim:3 Metric
 
 figure(2);
-CustAxis = [0 0.6 0 1.1];
+CustAxis = [0 1 0 1.1];
 col = {'b', 'r'};
 minThreshold = 0.0001;
 for cs = 1:4
     Case(2) = cs + 3;
     for i = 1:2
         FileName = [FilePre{Case(1)} FileSuf{Case(2)} FileFolder{i} 'Stat'];
-        FilePath = [BaseFolder '\' FileName]; 
+        FilePath = [BaseFolder filesep FileName]; 
         Val = load (FilePath);
         Val = Val.VoxStat;
         Val = reshape(Val(Case(3),:,:,:), 1, numel(Val(Case(3),:,:,:)));
@@ -64,12 +67,13 @@ for cs = 1:4
         minX = min(x(widthIdx));
         maxX = max(x(widthIdx));
         width = maxX - minX;
+        skw = skewness(c);
         bar(x, c, col{i});
         axis(CustAxis);
         line([minX maxX], [0.5 0.5], 'Color', 'k', 'LineWidth', 2);
         xlabel('\sigma_{|V|}');
         ylabel('Normalized Frequency');
-        title(sprintf('Histogram of %s of |V| of %s\nWidth = %f', Metric{Case(3)}, FileSuf{Case(2)}, width));
+        title(sprintf('Histogram of %s of |V| of %s: %s\nWidth = %f Skewness = %f', Metric{Case(3)}, FileFolder{i}, FileSuf{Case(2)}, width, skw));
     end
 end
 
@@ -93,7 +97,7 @@ for j = 1:size(FileSuf, 2)
     for k = 1:size(FileFolder, 2)
         for i = 1:2
             FileName = [FilePre{FileCfg{2,i}} FileSuf{j} FileFolder{k}];
-            FilePath = [BaseFolder '\' FileName FileCfg{1,i}]; 
+            FilePath = [BaseFolder filesep FileName FileCfg{1,i}]; 
             Val = load(FilePath);
             eval(['X = squeeze(Val.' FileCfg{3,i} '(1,:,:,:)' ')' ';']);
             A  = (reshape(squeeze(X), [1, numel(X)]))';
@@ -187,6 +191,6 @@ set(gca, 'XTickLabel', Cases);
 xlabel('Cases');
 
 
-%save([BaseFolder '\results'], 'SNR', 'Lines', 'TIperMag');
+%save([BaseFolder filesep 'results'], 'SNR', 'Lines', 'TIperMag');
 
 
