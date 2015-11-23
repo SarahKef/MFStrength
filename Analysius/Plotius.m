@@ -156,8 +156,8 @@ for k =1:size(FileFolder, 2)
 %        plot(binYmin(:,1), binYmin(:,2), 'm.');
 %        plot(binYmax(:,1), binYmax(:,2), 'b.');
 
-        line(Config{configIdx,3}(1:2), polyval(pLow, Config{configIdx,3}(1:2)), 'Color', 'r');
-        line(Config{configIdx,3}(1:2), polyval(pHigh, Config{configIdx,3}(1:2)), 'Color', 'g');
+%        line(Config{configIdx,3}(1:2), polyval(pLow, Config{configIdx,3}(1:2)), 'Color', 'r');
+%        line(Config{configIdx,3}(1:2), polyval(pHigh, Config{configIdx,3}(1:2)), 'Color', 'g');
         line(Config{configIdx,3}(1:2), polyval(pMid, Config{configIdx,3}(1:2)), 'Color', 'k', 'LineWidth' , 2);
         
         noiseNo = sum(noiseIdx);
