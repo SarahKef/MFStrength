@@ -139,11 +139,13 @@ for k =1:size(FileFolder, 2)
         maxLimit = 0.9;
         binYmax = zeros(round(binsNo*maxLimit), 2);
         for i=1:binsNo
-            binYmin(i, :) = min(SortedData(binX(i):binX(i+1), :));
+            [~, I] = min(SortedData(binX(i):binX(i+1), 2));
+            binYmin(i, :) = SortedData(binX(i) + I - 1, :);
             if (i > round(binsNo*maxLimit)) 
                 continue;
             end
-            binYmax(i, :) = max(SortedData(binX(i):binX(i+1), :));
+            [~, I] = max(SortedData(binX(i):binX(i+1), 2));
+            binYmax(i, :) = SortedData(binX(i) + I - 1, :);
         end
         
         pLow = polyfit(binYmin(:,1), binYmin(:,2), 1);
@@ -187,6 +189,7 @@ plot(SNR(:,2,2) ./ SNR(:,2,1),'ro-', 'LineWidth', 2);
 legend('3T SNR', '7T SNR');
 set(gca, 'XTickLabel', Cases);
 xlabel('Cases');
+ylabel('SNR');
 
 %%
 figure(5);
