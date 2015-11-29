@@ -4,10 +4,10 @@ FileSuf = {'60100', '6071','6040','404024', '404016', '40408', '40404'};
 FilePre = {'VX','VY','VZ','Mag'};
 FileFolder = {'3T','7T'}; 
 % PadUnWrp
-InputBaseFolder = 'C:\Users\vhasfckefays\Projects\MF Strength 4DFlow\ProVelMats';
-OutputBaseFolder = 'C:\Users\vhasfckefays\Projects\MF Strength 4DFlow\AnalysisVelMats';
+InputBaseFolder = 'C:\Users\vhasfckefays\Projects\MFStrength\ProVelMatsPadUnWrp';
+OutputBaseFolder = 'C:\Users\vhasfckefays\Projects\MFStrength\AnalysisVelMatsPadUnWrp';
 Stat = zeros(max(size(FileFolder)), max(size(FilePre)), max(size(FileSuf)), 3, 2);
-ROI{1} = 30;
+ROI{1} = 1:40;
 ROI{2} = 1:304;
 ROI{3} = 1:304;
 
@@ -15,7 +15,7 @@ for i = 1:size(FileFolder,2)
     load ([InputBaseFolder '\' 'maskshft' FileFolder{i}]);
     for k = 1:size(FileSuf,2)
         for j = 1:size(FilePre,2)
-            FileName = [FilePre{j} FileSuf{k} FileFolder{i} 'Pad']; %'UnWr'
+            FileName = [FilePre{j} FileSuf{k} FileFolder{i} 'PadUnWr']; %'UnWr'
             FilePath = [InputBaseFolder '\' FileName]; 
             
             Val = load (FilePath);

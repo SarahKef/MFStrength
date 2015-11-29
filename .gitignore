@@ -44,10 +44,12 @@ Temporary Items
 
 # Data
 *.mat
+*.zip
 
 # Images
 *.png
 *.jpg
+*.fig
 
 # MATLAB extra files
 *.asv
