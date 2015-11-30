@@ -199,10 +199,12 @@ for k =1:size(FileFolder, 2)
         noiseNo = sum(noiseIdx);
         signalNo = sum(signalIdx);
         totalError = sum(TIperMag{j,k}(:,2));
+        noiseMean = mean(TIperMag{j,k}(noiseIdx,2));
+        signalMean = mean(TIperMag{j,k}(signalIdx,2));
         noiseRatio = noiseNo./(noiseNo + signalNo);
         signalRatio = signalNo./(noiseNo + signalNo);
         
-        SNR(j,k,:) = [noiseNo signalNo noiseRatio signalRatio totalError];
+        SNR(j,k,:) = [noiseNo signalNo noiseRatio signalRatio totalError noiseMean signalMean];
         Lines{j,k} = [pMid; pLow; pHigh];
         
         %title(sprintf('Noise: %d%%, Signal: %d%%\nTotal Error=%.2f', round(100*noiseRatio), round(100*signalRatio), totalError));
