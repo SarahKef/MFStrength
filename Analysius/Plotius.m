@@ -137,7 +137,7 @@ figure(3);
 set (gcf, 'Units', 'normalized', 'Position', [0,0,1,1]);
 count = 0;
 binsNo = 100;
-SNR = zeros([size(TIperMag) 5]);
+SNR = zeros([size(TIperMag) 7]);
 Lines = cell(size(TIperMag));
 baseIdx = cell(size(FileFolder));
 baseNoise = cell(size(FileFolder));
