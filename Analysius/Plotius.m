@@ -17,7 +17,7 @@ ROI{3} = 1:304;
 load(Config{configIdx,1}); %PadUnWrp
 % dim:1 3T,7T dim:2 Vx,Vy,Vz,Mag dim:3 all cases dim:4 mean,std,RMS dim:5 all over,ROI
 %Cases = {'60x100x24', '60x71x24','60x40x24','40x40x24', '40x40x16', '40x40x8', '40x40x4'};
-Cases = {'60x100-24', '60x71-24','60x40-24','40x40-24', '40x40-16', '40x40-8', '40x40-4'};
+Cases = {'60x100-24°', '60x71-24°','60x40-24°','40x40-24°', '40x40-16°', '40x40-8°', '40x40-4°'};
 BaseFolder = Config{configIdx,2};
 %% <std>
 % 3T vs. 7T over cases
@@ -39,7 +39,7 @@ h2 = plot(x+0.15,std(:,2),'rd-','linewidth',2);
 set(gca, 'XTickLabel', Cases);
 ylabel('$$\frac{<\sigma_{V_{mag}}>}{<\overline{V}_{mag}>}$$','Interpreter','latex');
 xlabel('Cases');
-title('Relative mean of st. dev. of V_{mag} over all voxels');
+title('Relative mean of st. dev. of $$\overline{V}_{mag}$$ over all voxels','Interpreter','latex');
 set(fh, 'Position', [520   378   790   420]);
 legend([h1 h2], {'3T', '7T'}, 'Location', 'NorthWest');
 
@@ -56,7 +56,7 @@ CustAxis = [0 0.6 0 1.1];
 col = {'b', 'r'};
 minThreshold = 0.0001;
 for cs = 1:4
-    Case(2) = cs + 0;
+    Case(2) = cs + 3;
     for i = 1:2
         FileName = [FilePre{Case(1)} FileSuf{Case(2)} FileFolder{i} 'Stat'];
         FilePath = [BaseFolder filesep FileName]; 
@@ -206,10 +206,15 @@ for k =1:size(FileFolder, 2)
         Lines{j,k} = [pMid; pLow; pHigh];
         
         %title(sprintf('Noise: %d%%, Signal: %d%%\nTotal Error=%.2f', round(100*noiseRatio), round(100*signalRatio), totalError));
-        title(sprintf('Flow: %0.2f%%\nNoise: %0.2f%%\nTotal Error=%.2f', 100*signalRatio, 100*noiseRatio, totalError));
-        xlabel('<V_{mag}>');
+        
+        if (count == j) 
+            title(sprintf('%s\n\nFlow: %0.2f%%\nNoise: %0.2f%%\nTotal Error=%.2f', Cases{count}, 100*signalRatio, 100*noiseRatio, totalError));
+        else
+            title(sprintf('Flow: %0.2f%%\nNoise: %0.2f%%\nTotal Error=%.2f', 100*signalRatio, 100*noiseRatio, totalError));
+            xlabel('$$\overline{V}_{mag}$$','Interpreter','latex');
+        end
         if (j == 1)
-            ylabel('$$\sqrt{\Sigma(\sigma_i^2)}$$','Interpreter','latex');
+            ylabel(sprintf('%s\n\n\n%s', FileFolder{k}, '$$\sqrt{\Sigma(\sigma_i^2)}$$'),'Interpreter','latex');
         end
         
         if (j == snapshotCase(1) && k == snapshotCase(2))
@@ -251,6 +256,7 @@ set(gca, 'XTickLabel', Cases);
 xlabel('Cases');
 ylabel('Ratio');
 
+%{
 %%
 figure(6);
 imagesc(slice1);
@@ -362,4 +368,4 @@ for k = 2
         
     end
 end
-
+%}
