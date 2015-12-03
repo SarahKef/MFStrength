@@ -53,3 +53,5 @@ Temporary Items
 
 # MATLAB extra files
 *.asv
+
+*.m~

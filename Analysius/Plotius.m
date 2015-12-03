@@ -371,3 +371,29 @@ for k = 2
     end
 end
 %}
+
+%% <Vmag>
+% 3T vs. 7T over cases
+
+
+fh = figure(13);
+res = 2; %1:all over, 2:ROI
+metric = 4;
+
+x=1:7;
+vmag(:,1) = squeeze(Stat(1,metric,:,1,res));
+vmag(:,2) = squeeze(Stat(2,metric,:,1,res));
+mycolor=[0 0 1;1 0 0];
+b = bar(vmag, 'grouped');
+colormap(mycolor);
+hold on;
+h1 = plot(x-0.15,vmag(:,1),'bo-.','linewidth',2);
+h2 = plot(x+0.15,vmag(:,2),'rd-','linewidth',2);
+set(gca, 'XTickLabel', Cases);
+ylabel('$$<\overline{V}_{mag}>$$','Interpreter','latex');
+xlabel('Cases');
+title('Spatial mean of temporal mean of $$\overline{V}_{mag}$$ over all voxels','Interpreter','latex');
+set(fh, 'Position', [520   378   790   420]);
+legend([h1 h2], {'3T', '7T'}, 'Location', 'NorthWest');
+
+
