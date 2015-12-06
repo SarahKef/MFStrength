@@ -212,9 +212,9 @@ for k =1:size(FileFolder, 2)
         %title(sprintf('Noise: %d%%, Signal: %d%%\nTotal Error=%.2f', round(100*noiseRatio), round(100*signalRatio), totalError));
         
         if (count == j) 
-            title(sprintf('%s\n\nUnquantf: %0.2f%%\nQuantf: %0.2f%%\nMeanQuantf = %.3f', Cases{count}, 100*signalRatio, 100*noiseRatio, signalMean), 'FontSize', 12,'fontweight','bold');
+            title(sprintf('%s\n\nUnquant: %0.2f%%\nQuant: %0.2f%%\nMeanQuant = %.3f', Cases{count}, 100*signalRatio, 100*noiseRatio, signalMean), 'FontSize', 12,'fontweight','bold');
         else
-            title(sprintf('Unquantf: %0.2f%%\nQuantf: %0.2f%%\nMeanQuantf = %.3f', 100*signalRatio, 100*noiseRatio, signalMean),'FontSize', 12,'fontweight','bold');
+            title(sprintf('Unquant: %0.2f%%\nQuant: %0.2f%%\nMeanQuant = %.3f', 100*signalRatio, 100*noiseRatio, signalMean),'FontSize', 12,'fontweight','bold');
             xlabel('$$\overline{V}_{mag}$$','Interpreter','latex','FontSize', 12,'fontweight','bold');
         end
         if (j == 1)
