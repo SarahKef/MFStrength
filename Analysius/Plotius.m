@@ -52,7 +52,7 @@ Metric = {'mean', '\sigma', 'RMS'};
 Case = [4, 1, 2]; %dim:1 FilePre, dim:2 FileSuf, dim:3 Metric
 
 figure(2);
-CustAxis = [0 0.6 0 1.1];
+CustAxis = [0 0.6 0 100];
 col = {'b', 'r'};
 minThreshold = 0.0001;
 for cs = 1:4
@@ -66,7 +66,7 @@ for cs = 1:4
 
         subplot(2,4,4*(i-1)+cs);
         [c, x] = hist(Val(Val > minThreshold), 2000);
-        c = c ./ max(c);
+        c = c ;%./ max(c);
         widthIdx = (c >= 0.5);
         minX = min(x(widthIdx));
         maxX = max(x(widthIdx));
@@ -103,7 +103,7 @@ FileCfg {2,2} = 4;
 FileCfg {3,1} = 'TI'; 
 FileCfg {3,2} = 'VoxStat'; 
 TIperMag = cell (size(FileSuf, 2), size(FileFolder, 2));
-snapshotCase = [1, 2, 27 0.5 1]; %dim:1 FileSuf, dim:2 FileFolder, dim:3 Z slice, dim:4 Vmag
+snapshotCase = [7, 2, 27 1 1.5]; %dim:1 FileSuf, dim:2 FileFolder, dim:3 Z slice, dim:4 Vmag
 snapshot = cell(1,2);
 baseSnapshot = cell(size(FileFolder, 2), 2);
 
@@ -176,6 +176,8 @@ for k =1:size(FileFolder, 2)
         pMid(1) = tan(0.5 .* (atan(pLow(1)) + atan(pHigh(1))));
         pMid(2) = pLow(2) + (pHigh(2) - pLow(2)).*(pMid(1) - pLow(1))./(pHigh(1) - pLow(1));
         
+        %pMid = [0 0.1];
+        
         predictedTI = polyval(pMid, TIperMag{j,k}(:,1));
         noiseIdx = predictedTI <= TIperMag{j,k}(:,2);
         signalIdx = predictedTI > TIperMag{j,k}(:,2);
@@ -210,13 +212,13 @@ for k =1:size(FileFolder, 2)
         %title(sprintf('Noise: %d%%, Signal: %d%%\nTotal Error=%.2f', round(100*noiseRatio), round(100*signalRatio), totalError));
         
         if (count == j) 
-            title(sprintf('%s\n\nFlow: %0.2f%%\nNoise: %0.2f%%\nTotal Error=%.2f', Cases{count}, 100*signalRatio, 100*noiseRatio, totalError));
+            title(sprintf('%s\n\nUnquantf: %0.2f%%\nQuantf: %0.2f%%\nMeanQuantf = %.3f', Cases{count}, 100*signalRatio, 100*noiseRatio, signalMean), 'FontSize', 12,'fontweight','bold');
         else
-            title(sprintf('Flow: %0.2f%%\nNoise: %0.2f%%\nTotal Error=%.2f', 100*signalRatio, 100*noiseRatio, totalError));
-            xlabel('$$\overline{V}_{mag}$$','Interpreter','latex');
+            title(sprintf('Unquantf: %0.2f%%\nQuantf: %0.2f%%\nMeanQuantf = %.3f', 100*signalRatio, 100*noiseRatio, signalMean),'FontSize', 12,'fontweight','bold');
+            xlabel('$$\overline{V}_{mag}$$','Interpreter','latex','FontSize', 12,'fontweight','bold');
         end
         if (j == 1)
-            ylabel(sprintf('%s\n\n\n%s', FileFolder{k}, '$$\sqrt{\Sigma(\sigma_i^2)}$$'),'Interpreter','latex');
+            ylabel(sprintf('%s\n\n\n%s', FileFolder{k}, '$$\sqrt{\Sigma(\sigma_i^2)}$$'),'Interpreter','latex','FontSize', 12,'fontweight','bold');
         end
         
         if (j == snapshotCase(1) && k == snapshotCase(2))
@@ -258,7 +260,7 @@ set(gca, 'XTickLabel', Cases);
 xlabel('Cases');
 ylabel('Ratio');
 
-%{
+
 %%
 figure(6);
 imagesc(slice1);
@@ -370,7 +372,7 @@ for k = 2
         
     end
 end
-%}
+
 
 %% <Vmag>
 % 3T vs. 7T over cases
