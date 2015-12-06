@@ -398,4 +398,14 @@ title('Spatial mean of temporal mean of $$\overline{V}_{mag}$$ over all voxels',
 set(fh, 'Position', [520   378   790   420]);
 legend([h1 h2], {'3T', '7T'}, 'Location', 'NorthWest');
 
+%%
+figure(14);
+hold on;
+plot(SNR(:,1,7) ,'bo-.', 'LineWidth', 2);
+plot(SNR(:,2,7) ,'rd-', 'LineWidth', 2);
+legend('3T Mean Quantifiable', '7T Mean Quantifiable');
+set(gca, 'XTickLabel', Cases);
+xlabel('Cases');
+ylabel('m/s');
+
 
