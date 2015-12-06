@@ -103,7 +103,7 @@ FileCfg {2,2} = 4;
 FileCfg {3,1} = 'TI'; 
 FileCfg {3,2} = 'VoxStat'; 
 TIperMag = cell (size(FileSuf, 2), size(FileFolder, 2));
-snapshotCase = [7, 2, 27 1 1.5]; %dim:1 FileSuf, dim:2 FileFolder, dim:3 Z slice, dim:4 Vmag
+snapshotCase = [4, 2, 27 0.3 0.35]; %dim:1 FileSuf, dim:2 FileFolder, dim:3 Z slice, dim:4 Vmag
 snapshot = cell(1,2);
 baseSnapshot = cell(size(FileFolder, 2), 2);
 
@@ -323,7 +323,7 @@ set (gcf, 'Units', 'normalized', 'Position', [0,0,1,1]);
 %%
 figure(11);
 imagesc(slice5);
-set (gcf, 'Units', 'normalized', 'Position', [0,0,1,1]);
+set (gcf, 'Position', [0,0,1596,826]);
 map = [0, 1.0, 0
     0, 0.4, 0
     1, 1, 1
@@ -403,9 +403,41 @@ figure(14);
 hold on;
 plot(SNR(:,1,7) ,'bo-.', 'LineWidth', 2);
 plot(SNR(:,2,7) ,'rd-', 'LineWidth', 2);
-legend('3T Mean Quantifiable', '7T Mean Quantifiable');
+legend('3T', '7T');
 set(gca, 'XTickLabel', Cases);
 xlabel('Cases');
-ylabel('m/s');
+ylabel('Variation Mean of Quantifiable Voxels (m/s)');
 
 
+%%
+figure(15);
+set (gcf, 'Units', 'normalized', 'Position', [0,0,1,1]);
+count = 0;
+vLines = [0.3 0.35];
+for k = [1 2]
+    for j = 1
+        count = count + 1;
+        subplot(1, 2, count);
+        axis([0 1.5 0 1]);
+        hold on;
+        
+        predictedTI = polyval(Lines{j,k}(1, :), TIperMag{j,k}(:,1));
+        noiseIdx1 = (predictedTI <= TIperMag{j,k}(:,2)) & (TIperMag{j,k}(:,1) >= vLines(1)) & (TIperMag{j,k}(:,1) <= vLines(2));
+        noiseIdx2 = (predictedTI <= TIperMag{j,k}(:,2)) & ((TIperMag{j,k}(:,1) < vLines(1)) | (TIperMag{j,k}(:,1) > vLines(2)));
+        signalIdx1 = (predictedTI > TIperMag{j,k}(:,2)) & (TIperMag{j,k}(:,1) >= vLines(1)) & (TIperMag{j,k}(:,1) <= vLines(2));
+        signalIdx2 = (predictedTI > TIperMag{j,k}(:,2)) & ((TIperMag{j,k}(:,1) < vLines(1)) | (TIperMag{j,k}(:,1) > vLines(2)));
+
+        plot(TIperMag{j,k}(noiseIdx2,1), TIperMag{j,k}(noiseIdx2,2), '.', 'Color', [1 0.6 0]);
+        plot(TIperMag{j,k}(signalIdx2,1), TIperMag{j,k}(signalIdx2,2), '.', 'Color', [0 0.4 0]);
+        plot(TIperMag{j,k}(noiseIdx1,1), TIperMag{j,k}(noiseIdx1,2), 'r.', 'MarkerSize', 15);
+        plot(TIperMag{j,k}(signalIdx1,1), TIperMag{j,k}(signalIdx1,2), 'g.');
+
+        line(Config{configIdx,3}(1:2), polyval(Lines{j,k}(1, :), Config{configIdx,3}(1:2)), 'Color', 'k', 'LineWidth' , 2);
+        
+        for vl = vLines
+            line([vl vl], Config{configIdx,3}(1:2), 'Color', 'k', 'LineWidth' , 1);
+        end
+
+        
+    end
+end
